@@ -4,10 +4,12 @@ import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Set
 
 interface MyPluginSettings {
 	mySetting: string;
+	renderCookware: boolean;
 }
 
 const DEFAULT_SETTINGS: MyPluginSettings = {
-	mySetting: 'default'
+	mySetting: 'default',
+	renderCookware: true
 }
 
 export default class MyPlugin extends Plugin {
@@ -76,11 +78,13 @@ export default class MyPlugin extends Plugin {
 
 		// When registering intervals, this function will automatically clear the interval when the plugin is disabled.
 		this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
+
 	}
 
 	onunload() {
 
 	}
+
 
 	async loadSettings() {
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
@@ -88,6 +92,10 @@ export default class MyPlugin extends Plugin {
 
 	async saveSettings() {
 		await this.saveData(this.settings);
+	}
+
+	async writeOptions(changeOpts: (settings: MyPluginSettings) => void): Promise<void> {
+
 	}
 }
 
@@ -123,7 +131,7 @@ class SampleSettingTab extends PluginSettingTab {
 		containerEl.createEl('h2', {text: 'Settings for my awesome plugin.'});
 
 		new Setting(containerEl)
-			.setName('Setting #1')
+			.setName('Setting #2')
 			.setDesc('It\'s a secret')
 			.addText(text => text
 				.setPlaceholder('Enter your secret')
@@ -133,5 +141,20 @@ class SampleSettingTab extends PluginSettingTab {
 					this.plugin.settings.mySetting = value;
 					await this.plugin.saveSettings();
 				}));
+
+
+
+				
+
+
+		new Setting(containerEl)
+			.setName('Render cookware')
+			.setDesc('Whether cookware should be rendered in a recipe')
+			.addToggle(t => {
+				t.setValue(this.plugin.settings.renderCookware)
+				t.onChange(async(value)=>{
+					await this.plugin.writeOptions(old => (old.renderCookware = value));
+				});
+			});
 	}
 }
