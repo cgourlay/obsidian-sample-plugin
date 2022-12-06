@@ -1,8 +1,8 @@
 import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting, SettingTab } from 'obsidian';
-import {ISettings, Settings, SettingsTab} from "./src/settings";
+import {ICooklangSettings, CooklangSettings, CooklangSettingsTab} from "./src/settings";
 
 export default class CooklangPlugin extends Plugin {
-	settings: ISettings;
+	settings: ICooklangSettings;
 
 	async onload() {
 		await this.loadSettings();
@@ -57,7 +57,7 @@ export default class CooklangPlugin extends Plugin {
 		});
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
-		this.addSettingTab(new SettingsTab(this.app, this));
+		this.addSettingTab(new CooklangSettingsTab(this.app, this));
 
 		// If the plugin hooks up any global DOM events (on parts of the app that doesn't belong to this plugin)
 		// Using this function will automatically remove the event listener when this plugin is disabled.
@@ -76,10 +76,10 @@ export default class CooklangPlugin extends Plugin {
 
 
 	async loadSettings() {
-		this.settings = Object.assign({}, Settings, await this.loadData());
+		this.settings = Object.assign({}, CooklangSettings, await this.loadData());
 	}
 
-	async writeOptions(changeOpts: (settings: ISettings) => void): Promise<void> {
+	async writeOptions(changeOpts: (settings: ICooklangSettings) => void): Promise<void> {
 		await this.saveData(changeOpts);
 	}
 }

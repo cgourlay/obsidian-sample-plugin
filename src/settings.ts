@@ -1,21 +1,23 @@
 import { App, PluginSettingTab, Setting } from 'obsidian';
 import CooklangPlugin from 'main';
 
-export interface ISettings {
+export interface ICooklangSettings {
 	displayCookware: boolean;
 	displayIngredients: boolean;
 	displayTotalCookTime: boolean;
     displayQuantityInline: boolean;
+    displayTimers: boolean;
 }
 
-export const Settings : ISettings = {
-	displayCookware: true,
-	displayIngredients: true,
-	displayTotalCookTime: true,
-    displayQuantityInline: true
+export class CooklangSettings implements ICooklangSettings {
+	displayCookware: true
+	displayIngredients: true;
+	displayTotalCookTime: true;
+    displayQuantityInline: true;
+    displayTimers: true;
 }
 
-export class SettingsTab extends PluginSettingTab {
+export class CooklangSettingsTab extends PluginSettingTab {
 	
 	private plugin: CooklangPlugin;
 
@@ -30,13 +32,14 @@ export class SettingsTab extends PluginSettingTab {
 
 		containerEl.empty();
 
+        this.cooktimeSettings();
         this.cookwareSettings();
         this.ingredientSettings();
-        this.cookTimeSettings();
         this.inlineQuantitySettings();
+        this.timerSettings();
 	}
 
-    cookTimeSettings(){
+    cooktimeSettings(){
         new Setting(this.containerEl)
         .setName('Display total cook time')
         .setDesc('Whether the total cook time should be displayed in a recipe')
@@ -80,6 +83,18 @@ export class SettingsTab extends PluginSettingTab {
             t.setValue(this.plugin.settings.displayQuantityInline)
             t.onChange(async(value)=>{
                 await this.plugin.writeOptions(old => (old.displayQuantityInline = value));
+            });
+        });
+    }
+
+    timerSettings(){
+        new Setting(this.containerEl)
+        .setName('Display timer(s)')
+        .setDesc('Whether the timer(s) should be displayed')
+        .addToggle(t => {
+            t.setValue(this.plugin.settings.displayTimers)
+            t.onChange(async(value)=>{
+                await this.plugin.writeOptions(old => (old.displayTimers = value));
             });
         });
     }
