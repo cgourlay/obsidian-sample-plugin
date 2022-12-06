@@ -32,6 +32,7 @@ export class CooklangSettingsTab extends PluginSettingTab {
 
 		containerEl.empty();
 
+        this.generalSettings();
         this.cooktimeSettings();
         this.cookwareSettings();
         this.ingredientSettings();
@@ -62,6 +63,12 @@ export class CooklangSettingsTab extends PluginSettingTab {
             });
         });
     }
+
+    generalSettings(){
+        new Setting(this.containerEl)
+        .setName('General Settings')
+        .setHeading();
+    };
 
     ingredientSettings(){
         new Setting(this.containerEl)
