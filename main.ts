@@ -2,18 +2,13 @@ import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Set
 
 // Remember to rename these classes and interfaces!
 
-interface MyPluginSettings {
-	mySetting: string;
-	renderCookware: boolean;
-}
-
-const DEFAULT_SETTINGS: MyPluginSettings = {
-	mySetting: 'default',
-	renderCookware: true
+const DEFAULT_SETTINGS: ISettings = {
+	renderCookware: true,
+	renderIngredients: true
 }
 
 export default class MyPlugin extends Plugin {
-	settings: MyPluginSettings;
+	settings: ISettings;
 
 	async onload() {
 		await this.loadSettings();
@@ -94,7 +89,7 @@ export default class MyPlugin extends Plugin {
 		await this.saveData(this.settings);
 	}
 
-	async writeOptions(changeOpts: (settings: MyPluginSettings) => void): Promise<void> {
+	async writeOptions(changeOpts: (settings: ISettings) => void): Promise<void> {
 
 	}
 }
@@ -130,17 +125,6 @@ class SampleSettingTab extends PluginSettingTab {
 
 		containerEl.createEl('h2', {text: 'Settings for my awesome plugin.'});
 
-		new Setting(containerEl)
-			.setName('Setting #2')
-			.setDesc('It\'s a secret')
-			.addText(text => text
-				.setPlaceholder('Enter your secret')
-				.setValue(this.plugin.settings.mySetting)
-				.onChange(async (value) => {
-					console.log('Secret: ' + value);
-					this.plugin.settings.mySetting = value;
-					await this.plugin.saveSettings();
-				}));
 
 
 
@@ -148,13 +132,28 @@ class SampleSettingTab extends PluginSettingTab {
 
 
 		new Setting(containerEl)
-			.setName('Render cookware')
-			.setDesc('Whether cookware should be rendered in a recipe')
+			.setName('Display cookware')
+			.setDesc('Whether cookware should be displayed in a recipe')
 			.addToggle(t => {
 				t.setValue(this.plugin.settings.renderCookware)
 				t.onChange(async(value)=>{
 					await this.plugin.writeOptions(old => (old.renderCookware = value));
 				});
 			});
+
+		new Setting(containerEl)
+			.setName('Display ingredients')
+			.setDesc('Whether ingredients should be displayed in a recipe')
+			.addToggle(t => {
+				t.setValue(this.plugin.settings.renderIngredients)
+				t.onChange(async(value)=>{
+					await this.plugin.writeOptions(old => (old.renderIngredients = value));
+				});
+			});
 	}
+}
+
+interface ISettings {
+	renderCookware: boolean;
+	renderIngredients: boolean
 }
