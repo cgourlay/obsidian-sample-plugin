@@ -1,7 +1,7 @@
-import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
-import {ISettings, Settings} from "./src/settings";
+import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting, SettingTab } from 'obsidian';
+import {ISettings, Settings, SettingsTab} from "./src/settings";
 
-export default class MyPlugin extends Plugin {
+export default class CooklangPlugin extends Plugin {
 	settings: ISettings;
 
 	async onload() {
@@ -100,66 +100,3 @@ class SampleModal extends Modal {
 	}
 }
 
-class SettingsTab extends PluginSettingTab {
-	
-	plugin: MyPlugin;
-
-	constructor(app: App, plugin: MyPlugin) {
-		super(app, plugin);
-		this.plugin = plugin;
-	}
-
-	display(): void {
-		const {containerEl} = this;
-
-		containerEl.empty();
-
-		containerEl.createEl('h2', {text: 'Settings for my awesome plugin.'});
-
-
-
-
-				
-
-
-		new Setting(containerEl)
-			.setName('Display cookware')
-			.setDesc('Whether cookware should be displayed in a recipe')
-			.addToggle(t => {
-				t.setValue(this.plugin.settings.displayCookware)
-				t.onChange(async(value)=>{
-					await this.plugin.writeOptions(old => (old.displayCookware = value));
-				});
-			});
-
-		new Setting(containerEl)
-			.setName('Display ingredients')
-			.setDesc('Whether ingredients should be displayed in a recipe')
-			.addToggle(t => {
-				t.setValue(this.plugin.settings.displayIngredients)
-				t.onChange(async(value)=>{
-					await this.plugin.writeOptions(old => (old.displayIngredients = value));
-				});
-			});
-
-		new Setting(containerEl)
-			.setName('Display total cook time')
-			.setDesc('Whether the total cook time should be displayed in a recipe')
-			.addToggle(t => {
-				t.setValue(this.plugin.settings.displayTotalCookTime)
-				t.onChange(async(value)=>{
-					await this.plugin.writeOptions(old => (old.displayTotalCookTime = value));
-				});
-			});
-
-		new Setting(containerEl)
-			.setName('Display quantities inline')
-			.setDesc('Whether the quantities should be displayed alongside the recipe instruction')
-			.addToggle(t => {
-				t.setValue(this.plugin.settings.displayQuantityInline)
-				t.onChange(async(value)=>{
-					await this.plugin.writeOptions(old => (old.displayQuantityInline = value));
-				});
-			});
-	}
-}
