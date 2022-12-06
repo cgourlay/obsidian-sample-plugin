@@ -1,11 +1,5 @@
 import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
-
-// Remember to rename these classes and interfaces!
-
-const DEFAULT_SETTINGS: ISettings = {
-	renderCookware: true,
-	renderIngredients: true
-}
+import {ISettings, Settings} from "./src/settings";
 
 export default class MyPlugin extends Plugin {
 	settings: ISettings;
@@ -63,7 +57,7 @@ export default class MyPlugin extends Plugin {
 		});
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
-		this.addSettingTab(new SampleSettingTab(this.app, this));
+		this.addSettingTab(new SettingsTab(this.app, this));
 
 		// If the plugin hooks up any global DOM events (on parts of the app that doesn't belong to this plugin)
 		// Using this function will automatically remove the event listener when this plugin is disabled.
@@ -82,15 +76,11 @@ export default class MyPlugin extends Plugin {
 
 
 	async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
-	}
-
-	async saveSettings() {
-		await this.saveData(this.settings);
+		this.settings = Object.assign({}, Settings, await this.loadData());
 	}
 
 	async writeOptions(changeOpts: (settings: ISettings) => void): Promise<void> {
-
+		await this.saveData(changeOpts);
 	}
 }
 
@@ -110,7 +100,8 @@ class SampleModal extends Modal {
 	}
 }
 
-class SampleSettingTab extends PluginSettingTab {
+class SettingsTab extends PluginSettingTab {
+	
 	plugin: MyPlugin;
 
 	constructor(app: App, plugin: MyPlugin) {
@@ -135,9 +126,9 @@ class SampleSettingTab extends PluginSettingTab {
 			.setName('Display cookware')
 			.setDesc('Whether cookware should be displayed in a recipe')
 			.addToggle(t => {
-				t.setValue(this.plugin.settings.renderCookware)
+				t.setValue(this.plugin.settings.displayCookware)
 				t.onChange(async(value)=>{
-					await this.plugin.writeOptions(old => (old.renderCookware = value));
+					await this.plugin.writeOptions(old => (old.displayCookware = value));
 				});
 			});
 
@@ -145,15 +136,30 @@ class SampleSettingTab extends PluginSettingTab {
 			.setName('Display ingredients')
 			.setDesc('Whether ingredients should be displayed in a recipe')
 			.addToggle(t => {
-				t.setValue(this.plugin.settings.renderIngredients)
+				t.setValue(this.plugin.settings.displayIngredients)
 				t.onChange(async(value)=>{
-					await this.plugin.writeOptions(old => (old.renderIngredients = value));
+					await this.plugin.writeOptions(old => (old.displayIngredients = value));
+				});
+			});
+
+		new Setting(containerEl)
+			.setName('Display total cook time')
+			.setDesc('Whether the total cook time should be displayed in a recipe')
+			.addToggle(t => {
+				t.setValue(this.plugin.settings.displayTotalCookTime)
+				t.onChange(async(value)=>{
+					await this.plugin.writeOptions(old => (old.displayTotalCookTime = value));
+				});
+			});
+
+		new Setting(containerEl)
+			.setName('Display quantities inline')
+			.setDesc('Whether the quantities should be displayed alongside the recipe instruction')
+			.addToggle(t => {
+				t.setValue(this.plugin.settings.displayQuantityInline)
+				t.onChange(async(value)=>{
+					await this.plugin.writeOptions(old => (old.displayQuantityInline = value));
 				});
 			});
 	}
-}
-
-interface ISettings {
-	renderCookware: boolean;
-	renderIngredients: boolean
 }
