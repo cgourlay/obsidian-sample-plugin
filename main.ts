@@ -1,3 +1,4 @@
+import { create } from 'domain';
 import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting, SettingTab } from 'obsidian';
 import {ICooklangSettings, CooklangSettings, CooklangSettingsTab} from "./src/settings";
 
@@ -19,14 +20,9 @@ export default class CooklangPlugin extends Plugin {
 		const statusBarItemEl = this.addStatusBarItem();
 		statusBarItemEl.setText('Status Bar Text');
 
-		// This adds a simple command that can be triggered anywhere
-		this.addCommand({
-			id: 'open-sample-modal-simple',
-			name: 'Open sample modal (simple)',
-			callback: () => {
-				new SampleModal(this.app).open();
-			}
-		});
+		this.addCommands();
+
+		
 		// This adds an editor command that can perform some operation on the current editor instance
 		this.addCommand({
 			id: 'sample-editor-command',
@@ -81,6 +77,18 @@ export default class CooklangPlugin extends Plugin {
 
 	async writeOptions(changeOpts: (settings: ICooklangSettings) => void): Promise<void> {
 		await this.saveData(changeOpts);
+	}
+
+
+
+	addCommands(){
+		this.addCommand({
+			id: 'obsidian-cooklang-plugin',
+			name: 'Create new recipe',
+			callback: () => {
+				new SampleModal(this.app).open();
+			}
+		});
 	}
 }
 
