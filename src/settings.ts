@@ -4,17 +4,19 @@ import CooklangPlugin from 'main';
 export interface ICooklangSettings {
 	displayCookware: boolean;
 	displayIngredients: boolean;
-	displayTotalCookTime: boolean;
     displayQuantityInline: boolean;
     displayTimers: boolean;
+    displayTotalCookTime: boolean;
+    soundAlarm: boolean;
 }
 
 export class CooklangSettings implements ICooklangSettings {
 	displayCookware: true
 	displayIngredients: true;
-	displayTotalCookTime: true;
     displayQuantityInline: true;
     displayTimers: true;
+    displayTotalCookTime: true;
+    soundAlarm: true;
 }
 
 export class CooklangSettingsTab extends PluginSettingTab {
@@ -32,13 +34,27 @@ export class CooklangSettingsTab extends PluginSettingTab {
 
 		containerEl.empty();
 
+        // settings are rendered in the order listed
         this.generalSettings();
+        this.alarmSettings();
         this.cooktimeSettings();
         this.cookwareSettings();
         this.ingredientSettings();
         this.inlineQuantitySettings();
         this.timerSettings();
 	}
+
+    alarmSettings(){
+        new Setting(this.containerEl)
+        .setName('Sound alarm when timer ends')
+        .setDesc('Whether the alarm should be played when the timer ends')
+        .addToggle(t => {
+            t.setValue(this.plugin.settings.soundAlarm)
+            t.onChange(async(value)=>{
+                await this.plugin.writeOptions(old => (old.soundAlarm = value));
+            });
+        });
+    }
 
     cooktimeSettings(){
         new Setting(this.containerEl)
