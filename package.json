@@ -1,7 +1,7 @@
 {
-	"name": "obsidian-sample-plugin",
-	"version": "1.0.0",
-	"description": "This is a sample plugin for Obsidian (https://obsidian.md)",
+	"name": "obsidian-cooklang-editor",
+	"version": "0.0.1",
+	"description": "Personal recipe manager (leveraging the CookLang markup language) to help streamline your shopping routine and make cooking more fun!",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
