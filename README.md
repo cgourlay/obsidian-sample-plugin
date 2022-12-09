@@ -1,3 +1,29 @@
+# Summary
+
+## Build Status 
+
+## Table of contents
+
+- [Roadmap](#roadmap)
+- [Architecture](#architecture)
+- [Implemented functionality](#implemented)
+- [Building](#building)
+- [Compilation](#compilation)
+- [Unit tests](#unittests)
+- [Integration tests](#integrationtests)
+- [Documentation](#documentation)
+- [Contributing](#contributing)
+- [Prerequisites](#presrequisites)
+
+
+---
+
+# Getting Started
+
+`npm install`
+
+---
+
 # Obsidian Sample Plugin
 
 This is a sample plugin for Obsidian (https://obsidian.md).
@@ -5,7 +31,6 @@ This is a sample plugin for Obsidian (https://obsidian.md).
 This project uses Typescript to provide type checking and documentation.
 The repo depends on the latest plugin API (obsidian.d.ts) in Typescript Definition format, which contains TSDoc comments describing what it does.
 
-**Note:** The Obsidian API is still in early alpha and is subject to change at any time!
 
 This sample plugin demonstrates some of the basic functionality the plugin API can do.
 - Changes the default font color to red using `styles.css`.
@@ -66,8 +91,3 @@ Quick starting guide for new plugin devs:
   - eslint will then create a report with suggestions for code improvement by file and line number.
 - If your source code is in a folder, such as `src`, you can use eslint with this command to analyze all files in that folder:
   - `eslint .\src\`
-
-
-## API Documentation
-
-See https://github.com/obsidianmd/obsidian-api
